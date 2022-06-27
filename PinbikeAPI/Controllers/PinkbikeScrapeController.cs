@@ -72,7 +72,18 @@ namespace PinbikeAPI.Controllers
                     HtmlDocument Videodoc = new HtmlDocument();
                     Videodoc.Load(stream);
 
-                    VideoUrl = Videodoc.DocumentNode.SelectSingleNode("//iframe").GetAttributeValue("src", "");
+                    if (Videodoc.DocumentNode.SelectSingleNode("//iframe") != null)
+                    {
+                        VideoUrl = Videodoc.DocumentNode.SelectSingleNode("//iframe").GetAttributeValue("src", "");
+                    }
+                    else if (Videodoc.DocumentNode.SelectSingleNode("//source") != null)
+                    {
+                        VideoUrl = Videodoc.DocumentNode.SelectSingleNode("//source").GetAttributeValue("src", "");
+                    }
+                    else {
+                        VideoUrl = "The video url could not be located.";
+                    }
+
                 }
 
                 Article articleStruct = new Article(title, description, hasVideo, PubDate, ArticleUrl, VideoUrl);
