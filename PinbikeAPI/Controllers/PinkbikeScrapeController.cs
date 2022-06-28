@@ -7,9 +7,9 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace PinbikeAPI.Controllers
 {
+
     public class Article
     {
-        //Creating the Article Class
         public string title { get; set; }
         public string description { get; set; }
         public bool HasVideo { get; set; }
@@ -17,8 +17,6 @@ namespace PinbikeAPI.Controllers
         public string ArticleUrl { get; set; }
         public string VideoUrl { get; set; }
 
-
-        //Parseing Information to Article
         public Article(string title, string description, bool hasVideo, string PubDate, string ArticleUrl, string VideoUrl)
         {
             this.title = cleanData(title);
@@ -52,7 +50,7 @@ namespace PinbikeAPI.Controllers
             List<Article> Datalist = new List<Article>();
             HttpClient hc = new HttpClient();
 
-            //Setting the Webiste to Scrape Information
+            //Getting the website to scrape information
             HttpResponseMessage result = await hc.GetAsync($"https://www.pinkbike.com/");
             Stream stream = await result.Content.ReadAsStreamAsync();
             HtmlDocument doc = new HtmlDocument();
@@ -73,6 +71,7 @@ namespace PinbikeAPI.Controllers
 
                 //If Article has a video it will assign the URL of that video to VideoURL
                 //Problem that occured is sometimes videos in diffrent formats have diffrent tags
+                //Which is why there are 2 different node types being checked for
                 if (hasVideo)
                 {
                     result = await hc.GetAsync(ArticleUrl);
